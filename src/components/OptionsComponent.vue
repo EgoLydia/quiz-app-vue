@@ -1,7 +1,14 @@
 <template>
   <div :style="{ background: background }" class="option">
-    <input :id="'value' + index" :name="question" :value="value" type="radio" />
-    <label :for="'value' + index">{{ value }}</label>
+    <input
+      :checked="isChecked"
+      @change="$emit('chosen', value)"
+      :id="'value' + index"
+      :name="question"
+      :value="value"
+      type="radio"
+    />
+    <label :for="'value' + index" v-html="value"></label>
   </div>
 </template>
 
@@ -21,6 +28,10 @@ export default {
     },
     question: {
       type: String,
+    },
+    isChecked: {
+      type: Boolean,
+      default: false,
     },
   },
 };
