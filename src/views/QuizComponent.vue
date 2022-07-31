@@ -35,7 +35,7 @@
 <script>
 import ButtonComponent from "../components/ButtonComponent.vue";
 import QuestionCard from "../components/QuestionCard.vue";
-import Axios from "axios";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -44,7 +44,6 @@ export default {
   },
   data() {
     return {
-      questions: [],
       currentQuestion: 0,
     };
   },
@@ -54,9 +53,11 @@ export default {
         (question) => question.chosenAnswer === question.correct_answer
       );
     },
+    ...mapGetters(["questions"]),
   },
 
   methods: {
+    ...mapActions(["loadQuestions"]),
     finishQuiz() {
       this.$router.push({
         name: "Score",
@@ -74,14 +75,9 @@ export default {
     goToPrev() {
       this.currentQuestion -= 1;
     },
-    async loadQuestions() {
-      const response = await Axios.get("https://opentdb.com/api.php?amount=10");
-      return response.data;
-    },
   },
-  mounted: async function () {
-    const data = await this.loadQuestions();
-    this.questions = data.results;
+  mounted: function () {
+    this.loadQuestions();
   },
 };
 </script>
